@@ -1,48 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-  <link
-    rel="stylesheet"
-    href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/minty/bootstrap.min.css"
-  />
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Weather App</title>
-  </head>
-  <body>
-    <body>
-        <!--Navbar Section-->
-      <nav class="navbar navbar-dark bg-info mb-3">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <title>Document</title>
+</head>
+</html>
+<section class="hero is-info is-large">
+    <div class="hero-head">
+      <nav class="navbar">
         <div class="container">
-          <div class="navbar-brand">Event Master</div>
+          <div class="navbar-brand">
+            <a class="navbar-item">
+              <header>Events Master</header>
+            </a>
+          </div>
+          <div id="navbarMenuHeroB" class="navbar-menu">
+            <div class="navbar-end">
+              <a class="navbar-item is-active">
+                Home
+              </a>
+              <a class="navbar-item" href="events.html"> 
+                Events
+              </a>
+                </a>
+              </span>
+            </div>
+          </div>
         </div>
       </nav>
-      <!--Search Location Form Section-->
-      <div class="container searchContainer bg-warning float-left">
-        <div class="search card card-body">
-          <h1>Search Event</h1>
-          <p class="lead">Enter Your Location</p>
-          <input
-            type="text"
-            id="locationInput"
-            class="form-control"
-            placeholder="Location"
-          />
-        </div>
-        <br />
-        <div id="profile"></div>
+    </div>
+   
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <p class="title">
+          What's on today?
+        </p>
+        <p class="subtitle">
+          <br>
+            <input class="input is-medium" type="text" id="locationInput" placeholder="Search by City">
+            <div class="container text-left mt-2 d-inline-block">
+                <button class="btn btn-outline-info" type="submit" id="submit">Submit</button>
+                <!-- <button class="btn btn-outline-success" id="previousLocation">Previous Location</button> -->
+              </div>
+        </p>
       </div>
-      <!--Buttons section-->
-      <div class="container text-left mt-2 d-inline-block">
-        <button class="btn btn-outline-info" type="submit" id="submit">Submit</button>
-        <!-- <button class="btn btn-outline-success" id="previousLocation">Previous Location</button> -->
-      </div>
-     <!--Add current and future weather data to html using JS-->
-      <div id="content"></div>
-      <section id="current"></section>
-          <section id="forecast" class="row"></section>
-        </div>
-    </body>
+    </div>
+  </section>
+  
+  
+  
+  
+  <body>
+    
 
     <!-- Script Links to Jquery, Moment.js and JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

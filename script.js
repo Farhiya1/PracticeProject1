@@ -1,5 +1,7 @@
 const locationInputEl = document.getElementById("locationInput");
 const button = document.getElementById("submit");
+let currentWeatherEl = document.getElementById("current");
+
 var page = 0;
 
 // var stateI = "CA";
@@ -7,6 +9,7 @@ var Today = moment().format("YYYY-MM-DD");
 var dateI = Today;
 var categoryI = "";
 var EventAPIKey = "8vWG87wRwlREjTnlTeKlyotzDgBt6A0G";
+var myKey = "988fbbe10b9a8419e74f5e6d95338e7c";
 
 // const myKey = "8vWG87wRwlREjTnlTeKlyotzDgBt6A0G";
 
@@ -62,39 +65,44 @@ function getEventsByLocation(location) {
 }
 
 function getWeatherByLocation(location) {
-  // .... ajax call to get the weather
+  return fetch(
+    "https://api.openweathermap.org/data/2.5/oneCall?q=" +
+      location +
+      "lat=" +
+      latitude +
+      longitude +
+      "&appid=" +
+      myKey +
+      "&units=metric"
+  )
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+      var latitude = data.coord.lat;
+      var longitude = data.coord.lon;
+      getWeatherByLocation(latitude, longitude, input);
+    });
 }
 
-function renderWeather(weather) {}
-function renderEvents(events) {}
+// function renderWeather(weather) {}
+// function renderEvents(events) {}
 
 function handleSearchSubmit(event) {
-  debugger;
   event.preventDefault();
   var location = locationInputEl.value.trim();
 
   getEventsByLocation(location).then(function (events) {
-    debugger;
+    console.log(events);
     getWeatherByLocation(location).then(function (weather) {
-      renderWeather(weather);
-      renderEvents(events);
+      console.log(weather);
+      //   renderWeather(weather);
+      //   renderEvents(events);
+      // });
     });
   });
 }
-
-function getCurrentEvents(input) {
-  console.log("working");
-}
-
-//   fetch(
-//     `https://app.ticketmaster.com/discovery/v2/events.json?=apikey=8vWG87wRwlREjTnlTeKlyotzDgBt6A0G`
-//   ).then(function (response) {
-//     return response.json();
-//     console.log(data);
-//   });
-//   //  .then(function (data) {
-//   //  / console.log(data);
-//   // });
 
 // Event listener for search location button "submit"
 button.addEventListener("click", handleSearchSubmit);
