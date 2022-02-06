@@ -1,108 +1,73 @@
+// // Targeting html elements by id and class
 const locationInputEl = document.getElementById("locationInput");
 const button = document.getElementById("submit");
-let currentWeatherEl = document.getElementById("current");
+const eventContainer = document.querySelector(".event-container");
+const weatherContainer = document.querySelector(".weather-container");
+let video = document.querySelector("video");
 
-var page = 0;
+// Storing Api Keys in const
+const ticketMasterAPIKey = "8vWG87wRwlREjTnlTeKlyotzDgBt6A0G";
+const openWeatherAPIKey = "988fbbe10b9a8419e74f5e6d95338e7c";
 
-// var stateI = "CA";
-var Today = moment().format("YYYY-MM-DD");
-var dateI = Today;
-var categoryI = "";
-var EventAPIKey = "8vWG87wRwlREjTnlTeKlyotzDgBt6A0G";
-var myKey = "988fbbe10b9a8419e74f5e6d95338e7c";
+// Retreiving then storing live date from moment js to specify the events displayed to be for on the day. Using the variable 'Today' as a paremeter in teh feth call to get events data.
+let Today = moment().format("YYYY-MM-DD");
 
-// const myKey = "8vWG87wRwlREjTnlTeKlyotzDgBt6A0G";
+// Submit button to run function to run fetch call
+button.addEventListener("click", getEvents);
 
-// $.ajax({
-//   type: "GET",
-//   url:
-//     "https://app.ticketmaster.com/discovery/v2/events.json?apikey=" +
-//     EventAPIKey +
-//     "&sort=date,asc" +
-//     "&city=" +
-//     cityI +
-//     "&countryCode=GB" +
-//     "&startedatetime=" +
-//     dateI +
-//     "&classificationName=" +
-//     categoryI +
-//     "&size=4&page=" +
-//     page,
-//   //   "https://app.ticketmaster.com/discovery/v2/events.json?size=1&apikey=8vWG87wRwlREjTnlTeKlyotzDgBt6A0G",
-//   async: true,
-//   dataType: "json",
-//   success: function (json) {
-//     console.log(json);
-//     // Parse the response.
-//     // Do other things.
-//   },
-//   error: function (xhr, status, err) {
-//     // This time, we do not end up here!
-//   },
-// });
+// Function to get events from ticket masters API, and then dynamically displaying data using cards.
+function getEvents(e) {
+  // Once the search button is used, the video will be replaced with event and weather content
+  video.remove();
 
-function getEventsByLocation(location) {
-  return fetch(
+  // Clearing event data on page when a new location is searched
+  eventContainer.innerHTML = "";
+  fetch(
     "https://app.ticketmaster.com/discovery/v2/events.json?apikey=" +
-      EventAPIKey +
+      ticketMasterAPIKey +
       "&sort=date,asc" +
       "&city=" +
-      location +
+      locationInputEl.value +
       "&countryCode=GB" +
       "&startedatetime=" +
-      dateI +
-      "&classificationName=" +
-      categoryI +
+      Today +
       "&size=4"
   )
-    .then(function (res) {
-      return res.json();
-    })
-    .then(function (data) {
-      return data["_embedded"].events;
+    .then((res) => res.json())
+    .then((data) => {
+      data["_embedded"].events.forEach((event) => {
+        eventContainer.innerHTML += ` <div class="card mt-4">
+    ${event.name};
+    ${event.dates.status.code}
+    ${event.dates.start.localDate}      
+    </div>`;
+      });
     });
-  // ... ajax call from above would go here
-}
 
-function getWeatherByLocation(location) {
-  return fetch(
-    "https://api.openweathermap.org/data/2.5/oneCall?q=" +
-      location +
-      "lat=" +
-      latitude +
-      longitude +
-      "&appid=" +
-      myKey +
-      "&units=metric"
+  // Clearing weather data when new location is searched
+  weatherContainer.innerHTML = "";
+
+  // Fetching weather data
+  fetch(
+    `https://api.openweathermap.org/data/2.5/weather?q=${locationInputEl.value},gb&appid=${openWeatherAPIKey}`
   )
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      console.log(data);
-      var latitude = data.coord.lat;
-      var longitude = data.coord.lon;
-      getWeatherByLocation(latitude, longitude, input);
+    .then((res) => res.json())
+    .then((data) => {
+      // console.log(data)
+      // Storing weather data into an object
+      let weatherObject = {};
+      weatherObject.temp = data.main.temp;
+      weatherObject.name = data.name;
+      weatherObject.weather = data.weather[0].main;
+      weatherObject.weatherDescription = data.weather[0].description;
+      weatherObject.weatherIcon = data.weather[0].icon;
+      // weather.push(weatherObject);
+
+      // Displaying weather data using parameters on html in a card
+      weatherContainer.innerHTML += ` <div class="card mt-4">
+  ${weatherObject.name};
+  ${weatherObject.temp}
+  ${weatherObject.weather}
+  </div>`;
     });
 }
-
-// function renderWeather(weather) {}
-// function renderEvents(events) {}
-
-function handleSearchSubmit(event) {
-  event.preventDefault();
-  var location = locationInputEl.value.trim();
-
-  getEventsByLocation(location).then(function (events) {
-    console.log(events);
-    getWeatherByLocation(location).then(function (weather) {
-      console.log(weather);
-      //   renderWeather(weather);
-      //   renderEvents(events);
-      // });
-    });
-  });
-}
-
-// Event listener for search location button "submit"
-button.addEventListener("click", handleSearchSubmit);
