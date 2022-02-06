@@ -1,1 +1,60 @@
-.page-break-after: always
+video#bgvideo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  height: 50%;
+  object-fit: cover;
+  object-position: center;
+}
+/* position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 50%;
+  min-height: 50%;
+  width: 50%;
+  height: 50%;
+  z-index: -100;
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  background-size: cover; */
+
+html {
+  background-color: black;
+}
+
+body {
+  margin: 0;
+  background: #000;
+  background-size: cover;
+}
+/* .container {
+  flex: 50%;
+}
+
+.hero-body {
+  flex: 50%;
+} */
+
+.hero {
+  max-height: 20px;
+}
+
+button {
+  color: aquamarine;
+}
+
+#video_overlays {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.46);
+  z-index: 2;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+#video_box {
+  position: relative;
+}
