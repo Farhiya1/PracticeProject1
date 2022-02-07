@@ -12,8 +12,7 @@ const openWeatherAPIKey = "988fbbe10b9a8419e74f5e6d95338e7c";
 // Retreiving then storing live date from moment js to specify the events displayed to be for on the day. Using the variable 'Today' as a paremeter in teh feth call to get events data.
 let Today = moment().format("YYYY-MM-DD");
 
-// Submit button to run function to run fetch call
-button.addEventListener("click", getEvents);
+// Save searched location into local storage
 
 // Function to get events from ticket masters API, and then dynamically displaying data using cards.
 function getEvents(e) {
@@ -35,11 +34,27 @@ function getEvents(e) {
   )
     .then((res) => res.json())
     .then((data) => {
+      // console.log(data);
       data["_embedded"].events.forEach((event) => {
-        eventContainer.innerHTML += ` <div class="card mt-4">
-    ${event.name};
-    ${event.dates.status.code}
-    ${event.dates.start.localDate}      
+        eventContainer.innerHTML += ` <div class="card is-outlined mt-4">
+    
+    <div class="tile is-parent">
+    <div class="tile is-child box is outlined">
+      <p class="title">${event.name};</p>
+    </div>    
+    <div class="tile is-ancestor">
+<div class="tile is-parent">
+<article class="tile is-child box">
+  <p class="title">${event.dates.status.code}</p>
+  <p class="subtitle">What is up?</p>
+</article>
+</div>    
+<div class="tile is-parent">
+<article class="tile is-child box">
+<p class="title">${event.dates.start.localDate}</p>
+<p class="subtitle">What is up?</p>
+</article>
+</div>
     </div>`;
       });
     });
@@ -49,7 +64,7 @@ function getEvents(e) {
 
   // Fetching weather data
   fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=${locationInputEl.value},gb&appid=${openWeatherAPIKey}`
+    `https://api.openweathermap.org/data/2.5/weather?q=${locationInputEl.value},gb&appid=${openWeatherAPIKey}&units=metric`
   )
     .then((res) => res.json())
     .then((data) => {
@@ -65,9 +80,20 @@ function getEvents(e) {
 
       // Displaying weather data using parameters on html in a card
       weatherContainer.innerHTML += ` <div class="card mt-4">
-  ${weatherObject.name};
-  ${weatherObject.temp}
-  ${weatherObject.weather}
+      <div class="tile is-parent">
+    <article class="tile is-child box">
+      <p class="title">${weatherObject.name}</p>
+      <p class="subtitle">${weatherObject.temp}°C
+      </p>
+      <p class="subtitle">${weatherObject.weather}</p>
+        <img src="http://openweathermap.org/img/w/${data.weather[0].icon}.png">
+    </article>
+  </div>
+ 
+     
   </div>`;
     });
 }
+
+// Submit button to run function to run fetch call
+button.addEventListener("click", getEvents);
