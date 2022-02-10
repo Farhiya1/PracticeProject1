@@ -3,18 +3,20 @@ const locationInputEl = document.getElementById("locationInput");
 const button = document.getElementById("submit");
 const eventContainer = document.querySelector(".event-container");
 const weatherContainer = document.querySelector(".weather-container");
+const historyArray = document.querySelector("#searchHistoryList > ul");
 let video = document.querySelector("video");
-
 // Storing Api Keys in const
 const ticketMasterAPIKey = "8vWG87wRwlREjTnlTeKlyotzDgBt6A0G";
 const openWeatherAPIKey = "988fbbe10b9a8419e74f5e6d95338e7c";
+var array = [];
+// Save array in local storage
 
 // Retreiving then storing live date from moment js to specify the events displayed to be for on the day. Using the variable 'Today' as a paremeter in teh feth call to get events data.
 let Today = moment().format("YYYY-MM-DD");
 
-// Save searched location into local storage
+// Save searched events into local storage
 
-// Function to get events from ticket masters API, and then dynamically displaying data using cards.
+// Function to get events from ticket masters API, and then dynamically displaying data using cards. Function serves as a search handler.
 function getEvents(e) {
   // Once the search button is used, the video will be replaced with event and weather content
   video.remove();
@@ -34,12 +36,12 @@ function getEvents(e) {
   )
     .then((res) => res.json())
     .then((data) => {
-      // console.log(data);
+      console.log(data);
       data["_embedded"].events.forEach((event) => {
-        eventContainer.innerHTML += ` <div class="card is-outlined mt-4">
+        eventContainer.innerHTML += ` <div class="card is-outlined mt-10">
     
     <div class="tile is-parent">
-    <div class="tile is-child box is outlined">
+    <div class="tile is-child box ">
       <p class="title">${event.name};</p>
     </div>    
     <div class="tile is-ancestor">
@@ -93,7 +95,21 @@ function getEvents(e) {
      
   </div>`;
     });
+  // Retreive array from local storage
+  array.push(locationInputEl.value);
+  // save item back into local storage
+  historyArray.innerHTML = "";
+  array.forEach((place) => {
+    historyArray.innerHTML += `<li><button>${place}</button></li>`;
+  });
+  localStorage.setItem("array", JSON.stringify(array));
+  var retrievedHistory = localStorage.getItem("array");
 }
+
+// function searchHandler(e) {
+//   // Get city from search bar/form/whatever
+//   // Do the fetches
+// }
 
 // Submit button to run function to run fetch call
 button.addEventListener("click", getEvents);
